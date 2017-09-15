@@ -7,6 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'WPGraphQL\\Extensions\\Insights\\InstrumentSchema' => $baseDir . '/src/InstrumentSchema.php',
-    'WPGraphQL\\Extensions\\Insights\\Setup' => $baseDir . '/src/Setup.php',
     'WPGraphQL\\Extensions\\Insights\\Tracing' => $baseDir . '/src/Tracing.php',
 );

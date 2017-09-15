@@ -88,7 +88,6 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		}
 
 		private function actions() {
-			add_action( 'init', [ '\WPGraphQL\Extensions\Insights\Setup', 'register' ] );
 			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'set_request_start_time' ] );
 			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'set_request_end_time' ] );
 		}
