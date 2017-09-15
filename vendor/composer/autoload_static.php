@@ -22,7 +22,6 @@ class ComposerStaticInit9e12acd0d8d678fe7190ac4fe7971f29
 
     public static $classMap = array (
         'WPGraphQL\\Extensions\\Insights\\InstrumentSchema' => __DIR__ . '/../..' . '/src/InstrumentSchema.php',
-        'WPGraphQL\\Extensions\\Insights\\Setup' => __DIR__ . '/../..' . '/src/Setup.php',
         'WPGraphQL\\Extensions\\Insights\\Tracing' => __DIR__ . '/../..' . '/src/Tracing.php',
     );
 
