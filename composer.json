@@ -1,0 +1,25 @@
+{
+  "name": "wp-graphql/wp-graphql-insights",
+  "description": "Insights for WPGraphQL. Performance and error logging.",
+  "type": "wordpress-plugin",
+  "license": "GPLv3",
+  "authors": [
+    {
+      "name": "Jason Bahl",
+      "email": "jasonbahl@mac.com"
+    }
+  ],
+  "require-dev": {
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+      "WPGraphQL\\Extensions\\Insights\\": "src/"
+    },
+    "classmap": [
+      "src/"
+    ]
+  }
+}
