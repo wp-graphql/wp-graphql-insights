@@ -56,23 +56,23 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		private static function setup_constants() {
 
 			// Plugin version.
-			if ( ! defined( 'WPGRAPHQL_APOLLO_OPTICS_VERSION' ) ) {
-				define( 'WPGRAPHQL_APOLLO_OPTICS_VERSION', '0.0.1' );
+			if ( ! defined( 'WPGRAPHQL_INSIGHTS_VERSION' ) ) {
+				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.0.1' );
 			}
 
 			// Plugin Folder Path.
-			if ( ! defined( 'WPGRAPHQL_APOLLO_OPTICS_PLUGIN_DIR' ) ) {
-				define( 'WPGRAPHQL_APOLLO_OPTICS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+			if ( ! defined( 'WPGRAPHQL_INSIGHTS_PLUGIN_DIR' ) ) {
+				define( 'WPGRAPHQL_INSIGHTS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 			}
 
 			// Plugin Folder URL.
-			if ( ! defined( 'WPGRAPHQL_APOLLO_OPTICS_PLUGIN_URL' ) ) {
-				define( 'WPGRAPHQL_APOLLO_OPTICS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+			if ( ! defined( 'WPGRAPHQL_INSIGHTS_PLUGIN_URL' ) ) {
+				define( 'WPGRAPHQL_INSIGHTS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 			}
 
 			// Plugin Root File.
-			if ( ! defined( 'WPGRAPHQL_APOLLO_OPTICS_PLUGIN_FILE' ) ) {
-				define( 'WPGRAPHQL_APOLLO_OPTICS_PLUGIN_FILE', __FILE__ );
+			if ( ! defined( 'WPGRAPHQL_INSIGHTS_PLUGIN_FILE' ) ) {
+				define( 'WPGRAPHQL_INSIGHTS_PLUGIN_FILE', __FILE__ );
 			}
 
 			// The version of the Tracing spec that's being used.
@@ -84,7 +84,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		}
 
 		private function includes() {
-			require_once( WPGRAPHQL_APOLLO_OPTICS_PLUGIN_DIR . 'vendor/autoload.php' );
+			require_once( WPGRAPHQL_INSIGHTS_PLUGIN_DIR . 'vendor/autoload.php' );
 		}
 
 		private function actions() {

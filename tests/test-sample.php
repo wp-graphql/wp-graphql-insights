@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package Wp_Graphql_Apollo_Optics
+ * @package WPGraphQL_Insights
  */
 
 /**
