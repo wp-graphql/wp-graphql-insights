@@ -14,6 +14,8 @@
 
 namespace WPGraphQL\Extensions;
 
+use WPGraphQL\Extensions\Insights\Tracing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -88,18 +90,40 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		}
 
 		private function actions() {
+
 			add_action( 'init', [ '\WPGraphQL\Extensions\Insights\Setup', 'register' ] );
-			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'set_request_start_time' ] );
-			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'set_request_end_time' ] );
+			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'init_trace' ], 99, 3 );
+
+			add_action( 'do_graphql_request', function() {
+
+				if ( false === Tracing::$store_data ) {
+					return;
+				}
+
+				add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'close_trace' ], 99, 5 );
+				add_action( 'shutdown', [ '\WPGraphQL\Extensions\Insights\Data', 'store_trace_report' ] );
+
+			}, 100 );
+
 		}
 
 		private function filters() {
-			add_filter( 'graphql_schema', [ 'WPGraphQL\Extensions\Insights\InstrumentSchema', 'instrument' ], 10, 1 );
 
-			/**
-			 * Filter the request_results to include Tracing in the extensions
-			 */
-			add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracing_to_response_extensions' ], 10, 5 );
+			add_action( 'do_graphql_request', function() {
+
+				if ( false === Tracing::$store_data ) {
+					return;
+				}
+
+				add_filter( 'graphql_schema', [ 'WPGraphQL\Extensions\Insights\InstrumentSchema', 'instrument' ], 10, 1 );
+
+				/**
+				 * Filter the request_results to include Tracing in the extensions
+				 */
+				add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracing_to_response_extensions' ], 10, 5 );
+
+			}, 100 );
+
 		}
 
 	}

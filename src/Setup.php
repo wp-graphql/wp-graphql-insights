@@ -3,9 +3,6 @@ namespace WPGraphQL\Extensions\Insights;
 
 class Setup {
 
-	/**
-	 * Register Post Types and Taxonomies
-	 */
 	public function register() {
 
 		self::register_taxonomies();
@@ -17,7 +14,6 @@ class Setup {
 	 * Register post types where logging is stored
 	 */
 	private static function register_post_types() {
-
 		/**
 		 * Register the "graphql_requests" post_type where logs of GraphQL Requests are stored.
 		 *
@@ -44,15 +40,40 @@ class Setup {
 			'has_archive' => false,
 			'hierarchical' => false,
 			'show_in_graphql' => true,
-			'graphql_single_name' => 'GraphQLRequest',
-			'graphql_plural_name' => 'GraphQLRequests',
+			'graphql_single_name' => 'graphQLRequest',
+			'graphql_plural_name' => 'graphQLRequests',
 			'taxonomies' => [ 'graphql_operations', 'graphql_fields' ]
 		]);
 
+		/**
+		 * Register the "graphql_resolvers" post_type where logs of GraphQL Resolvers are stored.
+		 *
+		 * A GraphQL resolver is an instance of a field resolving during a GraphQL operation. Each field resolver
+		 * is logged here.
+		 */
+		register_post_type( 'graphql_resolvers', [
+			'labels' => [
+				'name' => _x( 'GraphQL Resolvers', 'Name of the post type used to store resolver logs for GraphQL requests', 'wp-graphql-insights' ),
+				'singular_name' => _x( 'GraphQL Resolver', 'Singular name of the post type used to store resolver logs for GraphQL requests', 'wp-graphql-insights' ),
+				'menu_name' => _x( 'GraphQL Resolvers', 'Name shown in the Admin Menu of the post type used to store resolver logs for GraphQL requests', 'wp-graphql-insights' ),
+				'name_admin_bar' => _x( 'GraphQL Resolvers', 'Name shown in the Admin Bar of the post type used to store resolver logs for GraphQL requests', 'wp-graphql-insights' ),
+			],
+			'description' => __( 'Instances of GraphQL resolvers, used for logging and analytic insights', 'wp-graphql-insights' ),
+			'public' => false,
+			'publicly_queryable' => true,
+			'show_ui' => true,
+			'show_in_menu' => 'edit.php?post_type=graphql_requests',
+			'query_var' => true,
+			'capability_type' => 'post',
+			'has_archive' => false,
+			'hierarchical' => false,
+			'show_in_graphql' => true,
+			'graphql_single_name' => 'graphQLResolver',
+			'graphql_plural_name' => 'graphQLResolvers',
+			'taxonomies' => [ 'graphql_fields', 'graphql_operations' ]
+		]);
 	}
-
 	private static function register_taxonomies() {
-
 		/**
 		 * GraphQL Operations.
 		 *
@@ -70,8 +91,8 @@ class Setup {
 			'show_ui' => true,
 			'show_in_menu' => true,
 			'show_in_graphql' => true,
-			'graphql_single_name' => 'GraphqlOperation',
-			'graphql_plural_name' => 'GraphQLOperations',
+			'graphql_single_name' => 'graphqlOperation',
+			'graphql_plural_name' => 'graphQLOperations',
 			'hierarchical' => false,
 		] );
 
@@ -91,13 +112,10 @@ class Setup {
 			'show_ui' => true,
 			'show_in_menu' => true,
 			'show_in_graphql' => true,
-			'graphql_single_name' => 'GraphqlField',
-			'graphql_plural_name' => 'GraphQLFields',
+			'graphql_single_name' => 'graphQLField',
+			'graphql_plural_name' => 'graphQLFields',
 			'hierarchical' => true,
 		] );
-
 	}
-
-
 
 }
