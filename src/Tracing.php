@@ -10,6 +10,13 @@ namespace WPGraphQL\Extensions\Insights;
 class Tracing {
 
 	/**
+	 * Stores whether tracing is enabled or not
+	 *
+	 * @var bool
+	 */
+	public static $store_data = true;
+
+	/**
 	 * Stores the resolver traces
 	 *
 	 * @var
@@ -123,7 +130,16 @@ class Tracing {
 	 * Sets the timestamp and microtime for the start of the request
 	 * @return string
 	 */
-	public static function set_request_start_time() {
+	public static function init_trace( $request, $operation_name, $variables ) {
+		Data::$document = $request;
+		Data::$operation_name = $operation_name;
+		Data::$variables = $variables;
+
+		// Don't store trace data for default IntrospectionQuery
+		if ( strpos( $request, 'IntrospectionQuery' ) ) {
+			self::$store_data = false;
+		}
+
 		self::$request_start_microtime = microtime( true );
 		self::$request_start_timestamp = self::_format_timestamp( self::$request_start_microtime );
 	}
@@ -132,7 +148,7 @@ class Tracing {
 	 * Sets the timestamp and microtime for the end of the request
 	 * @return string
 	 */
-	public static function set_request_end_time() {
+	public static function close_trace( $result, $schema, $operation_name, $request, $variables ) {
 		self::$request_end_microtime = microtime( true );
 		self::$request_end_timestamp = self::_format_timestamp( self::$request_end_microtime );
 	}
@@ -212,6 +228,32 @@ class Tracing {
 	}
 
 	/**
+	 * Returns an array of trace data
+	 * @return array
+	 */
+	public static function get_trace() {
+
+		$trace = [
+			'version'   => absint( GRAPHQL_TRACING_SPEC_VERSION ),
+			'startTime' => esc_html( self::$request_start_timestamp ),
+			'endTime'   => esc_html( self::$request_end_timestamp ),
+			'duration'  => absint( self::get_request_duration() ),
+			'execution' => [
+				'resolvers' => self::$sanitized_resolver_traces,
+			]
+		];
+
+		/**
+		 * Filer and return the trace data
+		 * @param array $trace An array of Trace data
+		 */
+		Data::$trace_report = apply_filters( 'graphql_insights_get_trace', $trace );
+
+		return Data::$trace_report;
+
+	}
+
+	/**
 	 * This adds the "tracing" to the GraphQL response extensions.
 	 *
 	 * @param $results
@@ -224,15 +266,7 @@ class Tracing {
 		 * If tracing should be included in the response
 		 */
 		if ( true === self::include_tracing_in_response( $results, $schema, $operation_name, $request, $variables ) ) {
-			$results->extensions['tracing'] = [
-				'version'   => absint( GRAPHQL_TRACING_SPEC_VERSION ),
-				'startTime' => esc_html( self::$request_start_timestamp ),
-				'endTime'   => esc_html( self::$request_end_timestamp ),
-				'duration'  => absint( self::get_request_duration() ),
-				'execution' => [
-					'resolvers' => self::$sanitized_resolver_traces,
-				]
-			];
+			$results->extensions['tracing'] = self::get_trace();
 		}
 
 		/**

@@ -20,8 +20,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
+	/**
+	 * Class Insights
+	 *
+	 * @package WPGraphQL\Extensions
+	 */
 	final class Insights {
 
+		/**
+		 * Holds the instance of the Insights class
+		 * @var \WPGraphQL\Extensions\Insights
+		 */
 		private static $instance;
 
 		/**
@@ -39,6 +48,12 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 		}
 
+		/**
+		 * Disable unserializing of the class.
+		 *
+		 * @access public
+		 * @return void
+		 */
 		public function __wakeup() {
 
 			// De-serializing instances of the class is forbidden.
@@ -46,6 +61,12 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 		}
 
+		/**
+		 * Setup plugin constants.
+		 *
+		 * @access public
+		 * @return void
+		 */
 		public function __clone() {
 
 			// Cloning instances of the class is forbidden.
@@ -53,6 +74,12 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 		}
 
+		/**
+		 * Setup plugin constants.
+		 *
+		 * @access private
+		 * @return void
+		 */
 		private static function setup_constants() {
 
 			// Plugin version.
@@ -83,31 +110,57 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 		}
 
+		/**
+		 * Include required files.
+		 * Uses composer's autoload
+		 *
+		 * @access private
+		 * @return void
+		 */
 		private function includes() {
 			require_once( WPGRAPHQL_INSIGHTS_PLUGIN_DIR . 'vendor/autoload.php' );
 		}
 
+		/**
+		 * Sets up actions to run at certain spots throughout WordPress and the WPGraphQL execution cycle
+		 *
+		 * @access private
+		 * @return void
+		 */
 		private function actions() {
-			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'set_request_start_time' ] );
-			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'set_request_end_time' ] );
+
+			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'init_trace' ], 99, 3 );
+			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'close_trace' ], 99, 5 );
+
 		}
 
+		/**
+		 * Setup filters
+		 *
+		 * @access private
+		 * @return void
+		 */
 		private function filters() {
+
 			add_filter( 'graphql_schema', [ 'WPGraphQL\Extensions\Insights\InstrumentSchema', 'instrument' ], 10, 1 );
 
 			/**
 			 * Filter the request_results to include Tracing in the extensions
 			 */
 			add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracing_to_response_extensions' ], 10, 5 );
+
 		}
 
 	}
 
 }
 
+/**
+ * Initialize the plugin
+ * @return object
+ */
 function graphql_insights_init() {
 	return \WPGraphQL\Extensions\Insights::instance();
 }
 
-add_action( 'plugins_loaded', '\WPGraphQL\Extensions\graphql_insights_init' );
-
+add_action( 'graphql_init', '\WPGraphQL\Extensions\graphql_insights_init' );
