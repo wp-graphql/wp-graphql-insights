@@ -19,13 +19,13 @@ class TestData extends WP_UnitTestCase {
 
 	function testGetDocument() {
 		\WPGraphQL\Extensions\Insights\Data::$document = 'Test';
-		$actual = \WPGraphQL\Extensions\Insights\Data::$document;
+		$actual = \WPGraphQL\Extensions\Insights\Data::get_document();
 		$this->assertEquals( 'Test', $actual );
 	}
 
 	function testGetOperationName() {
 		\WPGraphQL\Extensions\Insights\Data::$operation_name = 'Test';
-		$actual = \WPGraphQL\Extensions\Insights\Data::$operation_name;
+		$actual = \WPGraphQL\Extensions\Insights\Data::get_operation_name();
 		$this->assertEquals( 'Test', $actual );
 	}
 

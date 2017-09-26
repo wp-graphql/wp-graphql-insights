@@ -12,6 +12,9 @@ class _Tracing extends \WPGraphQL\Extensions\Insights\Tracing {
 		self::$request_end_microtime = $time;
 		self::$request_end_timestamp = self::_format_timestamp( self::$request_end_microtime );
 	}
+	public static function _get_sanitized_resolver_traces() {
+		return self::$sanitized_resolver_traces;
+	}
 }
 
 class TestTracing extends WP_UnitTestCase {
@@ -85,6 +88,38 @@ class TestTracing extends WP_UnitTestCase {
 		_Tracing::_set_request_end_microtime( $this->microtime );
 		$actual = \WPGraphQL\Extensions\Insights\Tracing::get_request_end_timestamp();
 		$this->assertEquals( $expected, $actual );
+	}
+
+	public function testAddTracingToResponseExtensions() {
+
+		\WPGraphQL\Extensions\Insights\Tracing::$include_in_response = true;
+
+		$response = new \GraphQL\Executor\ExecutionResult();
+		$this->assertArrayNotHasKey( 'extensions', $response->toArray() );
+
+		$traced_response = \WPGraphQL\Extensions\Insights\Tracing::add_tracing_to_response_extensions( $response, '', '', '', '' )->toArray();
+		$this->assertArrayHasKey( 'tracing', $traced_response['extensions'] );
+
+	}
+
+	public function testAddTracingToResponseExtensionsDisabled() {
+
+		\WPGraphQL\Extensions\Insights\Tracing::$include_in_response = false;
+
+		$response = new \GraphQL\Executor\ExecutionResult();
+		$this->assertArrayNotHasKey( 'extensions', $response->toArray() );
+
+		$traced_response = \WPGraphQL\Extensions\Insights\Tracing::add_tracing_to_response_extensions( $response, '', '', '', '' )->toArray();
+		$this->assertArrayNotHasKey( 'extensions', $traced_response );
+
+	}
+
+	public function testTraceResolverWithInvalidTrace() {
+		$trace = '';
+		\WPGraphQL\Extensions\Insights\Tracing::trace_resolver( $trace );
+		$sanitized_trace = _Tracing::_get_sanitized_resolver_traces();
+		$this->assertEmpty( $sanitized_trace[0] );
+
 	}
 
 }
