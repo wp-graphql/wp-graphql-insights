@@ -1,4 +1,5 @@
 <?php
+
 class Test_WPGraphQLInsights extends WP_UnitTestCase {
 
 	/**
