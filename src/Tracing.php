@@ -262,39 +262,39 @@ class Tracing {
 	/**
 	 * This adds the "tracing" to the GraphQL response extensions.
 	 *
-	 * @param $results
+	 * @param $response
 	 *
-	 * @return mixed
+	 * @return \GraphQL\Executor\ExecutionResult
 	 */
-	public static function add_tracing_to_response_extensions( $results, $schema, $operation_name, $request, $variables ) {
+	public static function add_tracing_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
 
 		/**
 		 * Filter whether the tracing should be included in the response or not.
 		 *
 		 * @param bool $include_in_response
-		 * @param object $results
+		 * @param object $response
 		 * @param object $schema
 		 * @param string $operation_name
 		 * @param string $request
 		 * @param array $variables
 		 */
-		$include_in_response = apply_filters( 'graphql_tracing_include_in_response', self::$include_in_response, $results, $schema, $operation_name, $request, $variables );
+		$include_in_response = apply_filters( 'graphql_tracing_include_in_response', self::$include_in_response, $response, $schema, $operation_name, $request, $variables );
 
 		if ( true !== $include_in_response ) {
-			return $results;
+			return $response;
 		}
 
 		/**
 		 * If tracing should be included in the response
 		 */
-		if ( true === self::include_tracing_in_response( $results, $schema, $operation_name, $request, $variables ) ) {
-			$results->extensions['tracing'] = self::get_trace();
+		if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
+			$response->extensions['tracing'] = self::get_trace();
 		}
 
 		/**
 		 * Return the GraphQL Results, with or without the tracing extension added
 		 */
-		return $results;
+		return $response;
 	}
 
 }
