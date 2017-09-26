@@ -131,6 +131,7 @@ class Tracing {
 	 * @return string
 	 */
 	public static function init_trace( $request, $operation_name, $variables ) {
+
 		Data::$document = $request;
 		Data::$operation_name = $operation_name;
 		Data::$variables = $variables;
@@ -148,7 +149,7 @@ class Tracing {
 	 * Sets the timestamp and microtime for the end of the request
 	 * @return string
 	 */
-	public static function close_trace( $result, $schema, $operation_name, $request, $variables ) {
+	public static function close_trace() {
 		self::$request_end_microtime = microtime( true );
 		self::$request_end_timestamp = self::_format_timestamp( self::$request_end_microtime );
 	}

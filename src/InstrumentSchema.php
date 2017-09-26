@@ -19,7 +19,7 @@ class InstrumentSchema {
 	 * Stores the resolver traces
 	 * @var array
 	 */
-	private static $resolver_traces = [];
+	protected static $resolver_traces = [];
 
 	/**
 	 * Returns the traces for the resolvers

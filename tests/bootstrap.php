@@ -17,7 +17,9 @@ require_once $_tests_dir . '/includes/functions.php';
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/wp-graphql-insights.php';
+	// Require WPGraphQL and WPGraphQL Insights
+	require_once( dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-graphql/wp-graphql.php' );
+	require_once( dirname( dirname( __FILE__ ) ) . '/wp-graphql-insights.php' );
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
