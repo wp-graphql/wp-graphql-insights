@@ -124,7 +124,7 @@ install_db() {
 
 install_wpgraphql() {
 	echo "Cloning WPGraphQL"
-	git clone git@github.com:wp-graphql/wp-graphql.git $WP_CORE_DIR/wp-content/plugins/wp-graphql
+	git clone https://github.com/wp-graphql/wp-graphql.git $WP_CORE_DIR/wp-content/plugins/wp-graphql
 }
 
 install_wp
