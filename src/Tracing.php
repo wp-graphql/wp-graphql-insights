@@ -141,11 +141,6 @@ class Tracing {
 		Data::$operation_name = $operation_name;
 		Data::$variables = $variables;
 
-		// Don't store trace data for default IntrospectionQuery
-		if ( strpos( $request, 'IntrospectionQuery' ) ) {
-			self::$store_data = false;
-		}
-
 		self::$request_start_microtime = microtime( true );
 		self::$request_start_timestamp = self::_format_timestamp( self::$request_start_microtime );
 	}
@@ -191,10 +186,7 @@ class Tracing {
 	 * @param $trace
 	 */
 	public static function trace_resolver( $trace ) {
-		if ( empty( $trace ) || ! is_array( $trace ) ) {
-			return;
-		}
-		self::$sanitized_resolver_traces[] = self::_sanitize_resolver_trace( $trace );
+		self::$sanitized_resolver_traces[] = ( ! empty( $trace ) || is_array( $trace ) ) ? self::_sanitize_resolver_trace( $trace ) : [];
 	}
 
 	/**
