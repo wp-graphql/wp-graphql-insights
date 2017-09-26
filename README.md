@@ -1,3 +1,5 @@
+![Logo](https://www.wpgraphql.com/wp-content/uploads/2017/06/wpgraphql-logo-e1502819081849.png)
+
 # WPGraphQL Insights
 
 [![Build Status](https://travis-ci.org/wp-graphql/wp-graphql-insights.svg?branch=master)](https://travis-ci.org/wp-graphql/wp-graphql-insights)
@@ -5,7 +7,7 @@
 
 This adds tracing to WPGraphQL, per the proposed Apollo Tracing Spec: https://github.com/apollographql/apollo-tracing.
 
-
+![Demo GIF showing usage in GraphiQL](https://github.com/wp-graphql/wp-graphql-insights/blob/master/img/wp-graphql-insights-tracing-demo.gif)
 
 ## Install / Activate the Plugin
 
