@@ -10,6 +10,11 @@ namespace WPGraphQL\Extensions\Insights;
 class Tracing {
 
 	/**
+	 * Stores whether tracing should be included in the response for GraphQL Requests
+	 */
+	public static $include_in_response = true;
+
+	/**
 	 * Stores whether tracing is enabled or not
 	 *
 	 * @var bool
@@ -262,6 +267,22 @@ class Tracing {
 	 * @return mixed
 	 */
 	public static function add_tracing_to_response_extensions( $results, $schema, $operation_name, $request, $variables ) {
+
+		/**
+		 * Filter whether the tracing should be included in the response or not.
+		 *
+		 * @param bool $include_in_response
+		 * @param object $results
+		 * @param object $schema
+		 * @param string $operation_name
+		 * @param string $request
+		 * @param array $variables
+		 */
+		$include_in_response = apply_filters( 'graphql_tracing_include_in_response', self::$include_in_response, $results, $schema, $operation_name, $request, $variables );
+
+		if ( true !== $include_in_response ) {
+			return $results;
+		}
 
 		/**
 		 * If tracing should be included in the response
