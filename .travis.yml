@@ -54,3 +54,11 @@ before_script:
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php coveralls.phar -v
+
+cache:
+  directories:
+  - vendor
+  - $HOME/.composer/cac
