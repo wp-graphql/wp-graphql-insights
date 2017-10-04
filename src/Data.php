@@ -1,11 +1,36 @@
 <?php
 namespace WPGraphQL\Extensions\Insights;
 
+/**
+ * Class Data
+ *
+ * @package WPGraphQL\Extensions\Insights
+ */
 class Data {
 
+	/**
+	 *
+	 * @var string The GraphQL request operation name
+	 * @access public
+	 */
 	public static $operation_name;
+
+	/**
+	 * @var string $document The GraphQL request document
+	 * @access public
+	 */
 	public static $document;
+
+	/**
+	 * @var array $variables The GraphQL request variables
+	 * @access public
+	 */
 	public static $variables;
+
+	/**
+	 * @var array $trace_report The trace report compiled as the GraphQL request is executed
+	 * @access public
+	 */
 	public static $trace_report;
 
 	/**
