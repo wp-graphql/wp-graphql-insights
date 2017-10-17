@@ -130,6 +130,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		private function actions() {
 
 			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'init_trace' ], 99, 3 );
+			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\QueryTrace', 'init_trace' ], 99, 3 );
 			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'close_trace' ], 99, 5 );
 
 		}
@@ -148,6 +149,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 			 * Filter the request_results to include Tracing in the extensions
 			 */
 			add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracing_to_response_extensions' ], 10, 5 );
+			add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracked_queries_to_response_extensions' ], 10, 5 );
 
 		}
 
