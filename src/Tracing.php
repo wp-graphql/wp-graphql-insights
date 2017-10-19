@@ -289,4 +289,21 @@ class Tracing {
 		return $response;
 	}
 
+	/**
+	 * Adds the tracked queries to the extensions response
+	 *
+	 * @param object $response
+	 * @param object $schema
+	 * @param string $operation_name
+	 * @param string $request
+	 * @param array $variables
+	 *
+	 * @return mixed
+	 */
+	public static function add_tracked_queries_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
+
+		$response->extensions['queryLog'] = QueryTrace::get_trace();
+		return $response;
+	}
+
 }

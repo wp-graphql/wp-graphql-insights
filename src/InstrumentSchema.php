@@ -116,25 +116,14 @@ class InstrumentSchema {
 							'startOffset' => $start_offset,
 						];
 
-						try {
-
-							/**
-							 * If the current field doesn't have a resolve function, use the defaultFieldResolver,
-							 * otherwise use the $field_resolver
-							 */
-							if ( null === $field_resolver || ! is_callable( $field_resolver ) ) {
-								$result = Executor::defaultFieldResolver( $source, $args, $context, $info );
-							} else {
-								$result = call_user_func( $field_resolver, $source, $args, $context, $info );
-							}
-
-						} catch ( \Exception $error ) {
-
-							/**
-							 * Throw an exception for the error that was returned from the resolver
-							 * @since 0.0.1
-							 */
-							throw new \Exception( $error );
+						/**
+						 * If the current field doesn't have a resolve function, use the defaultFieldResolver,
+						 * otherwise use the $field_resolver
+						 */
+						if ( null === $field_resolver || ! is_callable( $field_resolver ) ) {
+							$result = Executor::defaultFieldResolver( $source, $args, $context, $info );
+						} else {
+							$result = call_user_func( $field_resolver, $source, $args, $context, $info );
 						}
 
 						$trace['duration'] = Tracing::get_resolver_duration( $resolver_start );
