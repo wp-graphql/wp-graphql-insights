@@ -7,7 +7,7 @@
  * Author URI:      https://www.wpgraphql.com
  * Text Domain:     wp-graphql-insights
  * Domain Path:     /languages
- * Version:         0.0.1
+ * Version:         0.0.2
  *
  * @package         WPGraphQL_Insights
  */
@@ -84,7 +84,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 			// Plugin version.
 			if ( ! defined( 'WPGRAPHQL_INSIGHTS_VERSION' ) ) {
-				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.0.1' );
+				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.0.2' );
 			}
 
 			// Plugin Folder Path.
@@ -129,9 +129,30 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		 */
 		private function actions() {
 
+			/**
+			 * Initialize the trace when the GraphQL request begins
+			 */
 			add_action( 'do_graphql_request', [ '\WPGraphQL\Extensions\Insights\Tracing', 'init_trace' ], 99, 3 );
+
+			/**
+			 * Initialize the Query Trace when execution begins
+			 */
 			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\QueryTrace', 'init_trace' ], 99, 3 );
+
+			/**
+			 * Close the trace when execution completes
+			 */
 			add_action( 'graphql_execute', [ '\WPGraphQL\Extensions\Insights\Tracing', 'close_trace' ], 99, 5 );
+
+			/**
+			 * Initialize each resolver trace
+			 */
+			add_action( 'graphql_before_resolve', [ 'WPGraphQL\Extensions\Insights\Tracing', 'init_field_resolver_trace' ], 10, 6 );
+
+			/**
+			 * Close each resolver trace
+			 */
+			add_action( 'graphql_after_resolve', [ 'WPGraphQL\Extensions\Insights\Tracing', 'close_field_resolver_trace' ], 10, 6 );
 
 		}
 
@@ -142,8 +163,6 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		 * @return void
 		 */
 		private function filters() {
-
-			add_filter( 'graphql_schema', [ 'WPGraphQL\Extensions\Insights\InstrumentSchema', 'instrument' ], 10, 1 );
 
 			/**
 			 * Filter the request_results to include Tracing in the extensions
@@ -159,9 +178,21 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 /**
  * Initialize the plugin
- * @return object
+ * @return mixed|object|bool
  */
 function graphql_insights_init() {
+
+	/**
+	 * If the version of WPGraphQL isn't up to date, don't instantiate tracing
+	 * @todo: consider displaying an Admin Notice or something to that tune if the versions aren't compatible
+	 */
+	if ( defined( 'WPGRAPHQL_VERSION' ) && version_compare( WPGRAPHQL_VERSION, '0.0.20', '<=' ) ) {
+		return false;
+	}
+
+	/**
+	 * Return the instance of the Insights plugin to kick off functionality
+	 */
 	return \WPGraphQL\Extensions\Insights::instance();
 }
 

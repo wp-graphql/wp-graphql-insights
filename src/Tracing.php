@@ -1,6 +1,8 @@
 <?php
 
 namespace WPGraphQL\Extensions\Insights;
+use GraphQL\Type\Definition\ResolveInfo;
+use WPGraphQL\AppContext;
 
 /**
  * Class Tracing
@@ -8,6 +10,12 @@ namespace WPGraphQL\Extensions\Insights;
  * @package WPGraphQL\Extensions\Insights
  */
 class Tracing {
+
+	/**
+	 * Stores an individual trace for a field resolver
+	 * @var array
+	 */
+	protected static $field_resolver_trace = [];
 
 	/**
 	 * Stores whether tracing should be included in the response for GraphQL Requests
@@ -20,6 +28,12 @@ class Tracing {
 	 * @var bool
 	 */
 	public static $store_data = true;
+
+	/**
+	 * Stores the start microtime of a resolver
+	 * @var string
+	 */
+	protected static $resolver_start = null;
 
 	/**
 	 * Stores the resolver traces
@@ -177,7 +191,6 @@ class Tracing {
 	 */
 	public static function get_resolver_duration( $resolver_start ) {
 		$resolver_end = microtime( true );
-
 		return ( $resolver_end - $resolver_start ) * 1000000;
 	}
 
@@ -302,8 +315,36 @@ class Tracing {
 	 */
 	public static function add_tracked_queries_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
 
-		$response->extensions['queryLog'] = QueryTrace::get_trace();
+		if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
+			$response->extensions['queryLog'] = QueryTrace::get_trace();
+		}
 		return $response;
+	}
+
+	public static function init_field_resolver_trace( $field, $type_object, $source, $args, AppContext $context, ResolveInfo $info ) {
+
+		$start_offset = Tracing::get_resolver_start_offset();
+		self::$resolver_start = microtime( true );
+
+		self::$field_resolver_trace = [
+			'path' => $info->path,
+			'parentType' => $info->parentType->name,
+			'fieldName' => $info->fieldName,
+			'returnType' => $info->returnType->name,
+			'startOffset' => $start_offset,
+		];
+
+	}
+
+	public static function close_field_resolver_trace( $field, $type_object, $source, $args, AppContext $context, ResolveInfo $info ) {
+		self::$field_resolver_trace['duration'] = Tracing::get_resolver_duration( self::$resolver_start );
+		Tracing::trace_resolver( self::$field_resolver_trace );
+		self::reset_field_resolver_trace();
+	}
+
+	protected static function reset_field_resolver_trace() {
+		self::$field_resolver_trace = [];
+		self::$resolver_start = null;
 	}
 
 }
