@@ -7,7 +7,7 @@
  * Author URI:      https://www.wpgraphql.com
  * Text Domain:     wp-graphql-insights
  * Domain Path:     /languages
- * Version:         0.0.2
+ * Version:         0.2.0
  *
  * @package         WPGraphQL_Insights
  */
@@ -84,7 +84,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 			// Plugin version.
 			if ( ! defined( 'WPGRAPHQL_INSIGHTS_VERSION' ) ) {
-				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.0.2' );
+				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.2.0' );
 			}
 
 			// Plugin Folder Path.
@@ -147,12 +147,12 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 			/**
 			 * Initialize each resolver trace
 			 */
-			add_action( 'graphql_before_resolve', [ 'WPGraphQL\Extensions\Insights\Tracing', 'init_field_resolver_trace' ], 10, 6 );
+			add_action( 'graphql_before_resolve_field', [ 'WPGraphQL\Extensions\Insights\Tracing', 'init_field_resolver_trace' ], 10, 8 );
 
 			/**
 			 * Close each resolver trace
 			 */
-			add_action( 'graphql_after_resolve', [ 'WPGraphQL\Extensions\Insights\Tracing', 'close_field_resolver_trace' ], 10, 6 );
+			add_action( 'graphql_after_resolve_field', [ 'WPGraphQL\Extensions\Insights\Tracing', 'close_field_resolver_trace' ], 10, 8 );
 
 		}
 
@@ -183,7 +183,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 function graphql_insights_init() {
 
 	/**
-	 * If the version of WPGraphQL isn't up to date, don't instantiate tracing
+	 * If the version of WPGraphQL isn't up to date, don't instantiate tracing as it won't work properly
 	 * @todo: consider displaying an Admin Notice or something to that tune if the versions aren't compatible
 	 */
 	if ( defined( 'WPGRAPHQL_VERSION' ) && version_compare( WPGRAPHQL_VERSION, '0.0.20', '<=' ) ) {
