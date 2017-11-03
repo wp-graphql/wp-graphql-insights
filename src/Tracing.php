@@ -321,7 +321,17 @@ class Tracing {
 		return $response;
 	}
 
-	public static function init_field_resolver_trace( $field, $type_object, $source, $args, AppContext $context, ResolveInfo $info ) {
+	/**
+	 * @param $source
+	 * @param $args
+	 * @param $context
+	 * @param $info
+	 * @param $field_resolver
+	 * @param $type_name
+	 * @param $field_key
+	 * @param $field
+	 */
+	public static function init_field_resolver_trace( $source, $args, $context, $info, $field_resolver, $type_name, $field_key, $field ) {
 
 		$start_offset = Tracing::get_resolver_start_offset();
 		self::$resolver_start = microtime( true );
@@ -336,12 +346,25 @@ class Tracing {
 
 	}
 
-	public static function close_field_resolver_trace( $field, $type_object, $source, $args, AppContext $context, ResolveInfo $info ) {
+	/**
+	 * @param $source
+	 * @param $args
+	 * @param $context
+	 * @param $info
+	 * @param $field_resolver
+	 * @param $type_name
+	 * @param $field_key
+	 * @param $field
+	 */
+	public static function close_field_resolver_trace( $source, $args, $context, $info, $field_resolver, $type_name, $field_key, $field ) {
 		self::$field_resolver_trace['duration'] = Tracing::get_resolver_duration( self::$resolver_start );
 		Tracing::trace_resolver( self::$field_resolver_trace );
 		self::reset_field_resolver_trace();
 	}
 
+	/**
+	 *
+	 */
 	protected static function reset_field_resolver_trace() {
 		self::$field_resolver_trace = [];
 		self::$resolver_start = null;
