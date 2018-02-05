@@ -196,4 +196,4 @@ function graphql_insights_init() {
 	return \WPGraphQL\Extensions\Insights::instance();
 }
 
-add_action( 'graphql_init', '\WPGraphQL\Extensions\graphql_insights_init' );
+add_action( 'init', '\WPGraphQL\Extensions\graphql_insights_init' );
