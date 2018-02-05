@@ -253,6 +253,8 @@ class Tracing {
 			]
 		];
 
+
+
 		/**
 		 * Filer and return the trace data
 		 * @param array $trace An array of Trace data
@@ -293,11 +295,17 @@ class Tracing {
 		 */
 		if ( is_array( $response ) ) {
 			foreach ( $response as $key => $res ) {
+				/**
+				 * Only include the trace data once per request
+				 */
+				if ( 0 !== $key ) {
+					return false;
+				}
 				if ( true === self::include_tracing_in_response( $res, $schema, $operation_name, $request, $variables ) ) {
 					if ( is_object( $res ) ) {
-						$res->extensions['tracing'] = self::get_trace();
+						$res->extensions['tracing'] = self::get_trace( $key );
 					} else if ( is_array( $res ) ) {
-						$res['extensions']['tracing'] = self::get_trace();
+						$res['extensions']['tracing'] = self::get_trace( $key );
 					}
 				}
 				$response[ $key ] = $res;
@@ -329,11 +337,17 @@ class Tracing {
 
 		if ( is_array( $response ) ) {
 			foreach( $response as $key => $res ) {
+				/**
+				 * Only include the trace data once per request
+				 */
+				if ( 0 !== $key ) {
+					return false;
+				}
 				if ( true === self::include_tracing_in_response( $res, $schema, $operation_name, $request, $variables ) ) {
 					if ( is_object( $res ) ) {
-						$res->extensions['queryLog'] = self::get_trace();
+						$res->extensions['queryLog'] = QueryTrace::get_trace( $key );
 					} else if ( is_array( $res ) ) {
-						$res['extensions']['queryLog'] = self::get_trace();
+						$res['extensions']['queryLog'] = QueryTrace::get_trace( $key );
 					}
 				}
 				$response[ $key ] = $res;
