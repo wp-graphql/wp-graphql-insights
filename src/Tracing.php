@@ -186,12 +186,11 @@ class Tracing {
 
 	/**
 	 * Given a resolver start time, returns the duration of a resolver
-	 * @param string $resolver_start The microtime for the resolver start time
 	 * @return mixed
 	 */
-	public static function get_resolver_duration( $resolver_start ) {
+	public static function get_resolver_duration() {
 		$resolver_end = microtime( true );
-		return ( $resolver_end - $resolver_start ) * 1000000;
+		return ( $resolver_end - self::$request_start_microtime ) * 1000000;
 	}
 
 	/**
@@ -254,6 +253,8 @@ class Tracing {
 			]
 		];
 
+
+
 		/**
 		 * Filer and return the trace data
 		 * @param array $trace An array of Trace data
@@ -269,7 +270,7 @@ class Tracing {
 	 *
 	 * @param $response
 	 *
-	 * @return \GraphQL\Executor\ExecutionResult
+	 * @return mixed
 	 */
 	public static function add_tracing_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
 
@@ -292,8 +293,27 @@ class Tracing {
 		/**
 		 * If tracing should be included in the response
 		 */
-		if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
-			$response->extensions['tracing'] = self::get_trace();
+		if ( is_array( $response ) ) {
+			foreach ( $response as $key => $res ) {
+				/**
+				 * Only include the trace data once per request
+				 */
+				if ( 0 !== $key ) {
+					return false;
+				}
+				if ( true === self::include_tracing_in_response( $res, $schema, $operation_name, $request, $variables ) ) {
+					if ( is_object( $res ) ) {
+						$res->extensions['tracing'] = self::get_trace( $key );
+					} else if ( is_array( $res ) ) {
+						$res['extensions']['tracing'] = self::get_trace( $key );
+					}
+				}
+				$response[ $key ] = $res;
+			}
+		} else {
+			if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
+				$response->extensions['tracing'] = self::get_trace();
+			}
 		}
 
 		/**
@@ -315,9 +335,29 @@ class Tracing {
 	 */
 	public static function add_tracked_queries_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
 
-		if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
-			$response->extensions['queryLog'] = QueryTrace::get_trace();
+		if ( is_array( $response ) ) {
+			foreach( $response as $key => $res ) {
+				/**
+				 * Only include the trace data once per request
+				 */
+				if ( 0 !== $key ) {
+					return false;
+				}
+				if ( true === self::include_tracing_in_response( $res, $schema, $operation_name, $request, $variables ) ) {
+					if ( is_object( $res ) ) {
+						$res->extensions['queryLog'] = QueryTrace::get_trace( $key );
+					} else if ( is_array( $res ) ) {
+						$res['extensions']['queryLog'] = QueryTrace::get_trace( $key );
+					}
+				}
+				$response[ $key ] = $res;
+			}
+		} else {
+			if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
+				$response->extensions['queryLog'] = QueryTrace::get_trace();
+			}
 		}
+
 		return $response;
 	}
 
@@ -357,7 +397,7 @@ class Tracing {
 	 * @param $field
 	 */
 	public static function close_field_resolver_trace( $source, $args, $context, $info, $field_resolver, $type_name, $field_key, $field ) {
-		self::$field_resolver_trace['duration'] = Tracing::get_resolver_duration( self::$resolver_start );
+		self::$field_resolver_trace['duration'] = Tracing::get_resolver_duration();
 		Tracing::trace_resolver( self::$field_resolver_trace );
 		self::reset_field_resolver_trace();
 	}
