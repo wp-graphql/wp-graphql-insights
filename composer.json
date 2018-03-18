@@ -10,8 +10,6 @@
       "email": "jasonbahl@mac.com"
     }
   ],
-  "require-dev": {
-  },
   "config": {
     "optimize-autoloader": true
   },
