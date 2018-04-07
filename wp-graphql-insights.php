@@ -169,7 +169,23 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 			 */
 			add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracing_to_response_extensions' ], 10, 5 );
 			add_filter( 'graphql_request_results', [ 'WPGraphQL\Extensions\Insights\Tracing', 'add_tracked_queries_to_response_extensions' ], 10, 5 );
+			add_filter( 'graphql_access_control_allow_headers', [ $this, 'return_tracing_headers' ] );
 
+		}
+
+		/**
+		 * Filter the headers that WPGraphQL returns to include headers that indicate the WPGraphQL server supports
+		 * Apollo Tracing and Credentials
+		 *
+		 * @param $headers
+		 *
+		 * @return mixed
+		 */
+		public function return_tracing_headers( $headers ) {
+			$headers[] = 'X-Insights-Include-Tracing';
+			$headers[] = 'X-Apollo-Tracing';
+			$headers[] = 'Credentials';
+			return $headers;
 		}
 
 	}
