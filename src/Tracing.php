@@ -1,8 +1,6 @@
 <?php
 
 namespace WPGraphQL\Extensions\Insights;
-use GraphQL\Type\Definition\ResolveInfo;
-use WPGraphQL\AppContext;
 
 /**
  * Class Tracing
@@ -16,11 +14,6 @@ class Tracing {
 	 * @var array
 	 */
 	protected static $field_resolver_trace = [];
-
-	/**
-	 * Stores whether tracing should be included in the response for GraphQL Requests
-	 */
-	public static $include_in_response = true;
 
 	/**
 	 * Stores whether tracing is enabled or not
@@ -96,21 +89,6 @@ class Tracing {
 		$timestamp = \DateTime::createFromFormat( 'U.u', $time );
 
 		return $timestamp->format( "Y-m-d\TH:i:s.uP" );
-	}
-
-	/**
-	 * @param array  $results        The results of a GraphQL request
-	 * @param object $schema         The Schema for the GraphQL request
-	 * @param string $operation_name The name of the GraphQL operation
-	 * @param array  $request        The incoming request
-	 * @param array  $variables      The variables for the request
-	 *
-	 * @return bool
-	 */
-	protected static function include_tracing_in_response( $results, $schema, $operation_name, $request, $variables ) {
-		$include = apply_filters( 'graphql_insights_include_tracing_in_response', true, $results, $schema, $operation_name, $request, $variables );
-
-		return $include;
 	}
 
 	/**
@@ -284,7 +262,7 @@ class Tracing {
 		 * @param string $request
 		 * @param array $variables
 		 */
-		$include_in_response = apply_filters( 'graphql_tracing_include_in_response', self::$include_in_response, $response, $schema, $operation_name, $request, $variables );
+		$include_in_response = apply_filters( 'graphql_tracing_include_in_response', true, $response, $schema, $operation_name, $request, $variables );
 
 		if ( true !== $include_in_response ) {
 			return $response;
@@ -294,7 +272,7 @@ class Tracing {
 		 * If tracing should be included in the response
 		 */
 		if ( ! empty( $response ) ) {
-			if( is_array( $response ) ) {
+			if ( is_array( $response ) ) {
 				$response['extensions']['tracing'] = self::get_trace();
 			} else if ( is_object( $response ) ) {
 				$response->extensions['tracing'] = self::get_trace();
@@ -320,6 +298,21 @@ class Tracing {
 	 */
 	public static function add_tracked_queries_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
 
+		/**
+		 * Filter whether the queryLog should be included in the response or not.
+		 *
+		 * @param bool $include_in_response
+		 * @param object $response
+		 * @param object $schema
+		 * @param string $operation_name
+		 * @param string $request
+		 * @param array $variables
+		 */
+		$include_in_response = apply_filters( 'graphql_query_log_include_in_response', true, $response, $schema, $operation_name, $request, $variables );
+
+		if ( true !== $include_in_response ) {
+			return $response;
+		}
 
 		if ( ! empty( $response ) ) {
 			if( is_array( $response ) ) {
