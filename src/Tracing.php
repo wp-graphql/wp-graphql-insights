@@ -293,25 +293,10 @@ class Tracing {
 		/**
 		 * If tracing should be included in the response
 		 */
-		if ( is_array( $response ) ) {
-			foreach ( $response as $key => $res ) {
-				/**
-				 * Only include the trace data once per request
-				 */
-				if ( 0 !== $key ) {
-					return false;
-				}
-				if ( true === self::include_tracing_in_response( $res, $schema, $operation_name, $request, $variables ) ) {
-					if ( is_object( $res ) ) {
-						$res->extensions['tracing'] = self::get_trace( $key );
-					} else if ( is_array( $res ) ) {
-						$res['extensions']['tracing'] = self::get_trace( $key );
-					}
-				}
-				$response[ $key ] = $res;
-			}
-		} else {
-			if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
+		if ( ! empty( $response ) ) {
+			if( is_array( $response ) ) {
+				$response['extensions']['tracing'] = self::get_trace();
+			} else if ( is_object( $response ) ) {
 				$response->extensions['tracing'] = self::get_trace();
 			}
 		}
@@ -335,25 +320,11 @@ class Tracing {
 	 */
 	public static function add_tracked_queries_to_response_extensions( $response, $schema, $operation_name, $request, $variables ) {
 
-		if ( is_array( $response ) ) {
-			foreach( $response as $key => $res ) {
-				/**
-				 * Only include the trace data once per request
-				 */
-				if ( 0 !== $key ) {
-					return false;
-				}
-				if ( true === self::include_tracing_in_response( $res, $schema, $operation_name, $request, $variables ) ) {
-					if ( is_object( $res ) ) {
-						$res->extensions['queryLog'] = QueryTrace::get_trace( $key );
-					} else if ( is_array( $res ) ) {
-						$res['extensions']['queryLog'] = QueryTrace::get_trace( $key );
-					}
-				}
-				$response[ $key ] = $res;
-			}
-		} else {
-			if ( true === self::include_tracing_in_response( $response, $schema, $operation_name, $request, $variables ) ) {
+
+		if ( ! empty( $response ) ) {
+			if( is_array( $response ) ) {
+				$response['extensions']['queryLog'] = QueryTrace::get_trace();
+			} else if ( is_object( $response ) ) {
 				$response->extensions['queryLog'] = QueryTrace::get_trace();
 			}
 		}
