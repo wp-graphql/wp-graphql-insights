@@ -17,29 +17,6 @@ class QueryTrace {
 	protected static $trace = [];
 
 	/**
-	 * QueryTrace constructor.
-	 * @access public
-	 */
-	public function __construct() {
-
-		if ( ! defined( 'SAVEQUERIES' ) ) {
-			define( 'SAVEQUERIES', true );
-		}
-
-		if ( ! defined( 'QM_DB_EXPENSIVE' ) ) {
-			define( 'QM_DB_EXPENSIVE', 0.05 );
-		}
-
-		/**
-		 * Enable Core WordPress query logging
-		 */
-		if ( SAVEQUERIES && property_exists( $GLOBALS['wpdb'], 'save_queries' ) ) {
-			$GLOBALS['wpdb']->save_queries = true;
-		}
-
-	}
-
-	/**
 	 * Initialize the trace if SAVEQUERIES is enabled
 	 * @access public
 	 */

@@ -199,6 +199,13 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 function graphql_insights_init() {
 
 	/**
+	 * If SAVEQUERIES hasn't already been defined, define it now
+	 */
+	if ( ! defined( 'SAVEQUERIES' ) && true === apply_filters( 'wpgraphql_insights_track_queries', true ) ) {
+		define( 'SAVEQUERIES', true );
+	}
+
+	/**
 	 * If the version of WPGraphQL isn't up to date, don't instantiate tracing as it won't work properly
 	 * @todo: consider displaying an Admin Notice or something to that tune if the versions aren't compatible
 	 */
