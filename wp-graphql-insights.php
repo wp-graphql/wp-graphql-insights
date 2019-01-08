@@ -7,7 +7,7 @@
  * Author URI:      https://www.wpgraphql.com
  * Text Domain:     wp-graphql-insights
  * Domain Path:     /languages
- * Version:         0.2.0
+ * Version:         0.3.0
  *
  * @package         WPGraphQL_Insights
  */
@@ -84,7 +84,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 			// Plugin version.
 			if ( ! defined( 'WPGRAPHQL_INSIGHTS_VERSION' ) ) {
-				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.2.0' );
+				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.3.0' );
 			}
 
 			// Plugin Folder Path.
