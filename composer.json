@@ -3,7 +3,7 @@
   "description": "Insights for WPGraphQL. Performance and error logging.",
   "type": "wordpress-plugin",
   "license": "GPL-3.0+",
-  "version":"0.2.0",
+  "version":"0.3.0",
   "authors": [
     {
       "name": "Jason Bahl",
