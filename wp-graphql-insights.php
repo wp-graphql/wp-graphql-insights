@@ -199,6 +199,42 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 function graphql_insights_init() {
 
 	/**
+	 * Default $graphql_insights_active to false.
+	 */
+	$graphql_insights_active = false;
+
+	/**
+	 * Default capability to activate insights for.
+	 *
+	 * @param string $capability Capability to show
+	 */
+	$graphql_insights_default_capability = apply_filters( 'graphql_insights_default_capability', 'manage_options' );
+
+	/**
+	 * If GRAPQHL_DEBUG is enabled or the request is authenticated by a user with , enable Insights
+	 */
+	if ( defined( 'GRAPQHL_DEBUG' ) && true === GRAPHQL_DEBUG || current_user_can( $graphql_insights_default_capability ) ) {
+		$graphql_insights_active = true;
+	}
+
+	/**
+	 * Filter whether insights is active, allowing finer control over when to activate insights.
+	 *
+	 * Default is to activate when GRAPHQL_DEBUG is true or authenticated requests
+	 *
+	 * @param boolean $graphql_insights_active Whether insights should be enabled for a request
+	 *
+	 */
+	$graphql_insights_active = apply_filters( 'graphql_insights_active', $graphql_insights_active );
+
+	/**
+	 * If $graphql_insights_active is not true, return now before instantiating insights
+	 */
+	if ( true !== $graphql_insights_active ) {
+		return false;
+	}
+	
+	/**
 	 * If SAVEQUERIES hasn't already been defined, define it now
 	 */
 	if ( ! defined( 'SAVEQUERIES' ) && true === apply_filters( 'wpgraphql_insights_track_queries', true ) ) {
