@@ -7,7 +7,7 @@
  * Author URI:      https://www.wpgraphql.com
  * Text Domain:     wp-graphql-insights
  * Domain Path:     /languages
- * Version:         0.3.0
+ * Version:         0.3.1
  *
  * @package         WPGraphQL_Insights
  */
@@ -33,12 +33,9 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 		 */
 		private static $instance;
 
-		/**
-		 * @return object \WPGraphQL\Extensions\WPGraphQL_Insights
-		 */
 		public static function instance() {
 
-			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof \WPGraphQL\Extensions\Insights ) ) {
+			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Insights ) ) {
 				self::$instance = new Insights();
 				self::$instance->setup_constants();
 				self::$instance->includes();
@@ -84,7 +81,7 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 			// Plugin version.
 			if ( ! defined( 'WPGRAPHQL_INSIGHTS_VERSION' ) ) {
-				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.3.0' );
+				define( 'WPGRAPHQL_INSIGHTS_VERSION', '0.3.1' );
 			}
 
 			// Plugin Folder Path.
@@ -233,7 +230,7 @@ function graphql_insights_init() {
 	if ( true !== $graphql_insights_active ) {
 		return false;
 	}
-	
+
 	/**
 	 * If SAVEQUERIES hasn't already been defined, define it now
 	 */
@@ -249,10 +246,11 @@ function graphql_insights_init() {
 		return false;
 	}
 
+
 	/**
 	 * Return the instance of the Insights plugin to kick off functionality
 	 */
-	return \WPGraphQL\Extensions\Insights::instance();
+	return Insights::instance();
 }
 
 add_action( 'init', '\WPGraphQL\Extensions\graphql_insights_init' );
