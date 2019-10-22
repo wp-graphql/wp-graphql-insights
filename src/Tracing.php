@@ -189,7 +189,7 @@ class Tracing {
 
 		$sanitized_trace = [];
 
-		$sanitized_trace['path'] = ! empty( $trace['path'] && is_array( $trace['path'] ) ) ? array_map( ['WPGraphQL\Extensions\Insights\Tracing', '_sanitize_trace_resolver_path' ], $trace['path'] ) : [];
+		$sanitized_trace['path'] = ! empty( $trace['path'] ) && is_array( $trace['path'] ) ? array_map( ['WPGraphQL\Extensions\Insights\Tracing', '_sanitize_trace_resolver_path' ], $trace['path'] ) : [];
 		$sanitized_trace['parentType'] = ! empty( $trace['parentType'] ) ? esc_html( $trace['parentType'] ) : '';
 		$sanitized_trace['fieldName'] = ! empty( $trace['fieldName'] ) ? esc_html( $trace['fieldName'] ) : '';
 		$sanitized_trace['returnType'] = ! empty( $trace['returnType'] ) ? esc_html( $trace['returnType'] ) : '';
