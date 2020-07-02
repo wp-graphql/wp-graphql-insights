@@ -210,7 +210,7 @@ function graphql_insights_init() {
 	/**
 	 * If GRAPQHL_DEBUG is enabled or the request is authenticated by a user with , enable Insights
 	 */
-	if ( defined( 'GRAPQHL_DEBUG' ) && true === GRAPHQL_DEBUG || current_user_can( $graphql_insights_default_capability ) ) {
+	if ( defined( 'GRAPHQL_DEBUG' ) && true === GRAPHQL_DEBUG || current_user_can( $graphql_insights_default_capability ) ) {
 		$graphql_insights_active = true;
 	}
 
