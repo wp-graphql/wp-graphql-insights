@@ -208,7 +208,7 @@ function graphql_insights_init() {
 	$graphql_insights_default_capability = apply_filters( 'graphql_insights_default_capability', 'manage_options' );
 
 	/**
-	 * If GRAPQHL_DEBUG is enabled or the request is authenticated by a user with , enable Insights
+	 * If GRAPHQL_DEBUG is enabled or the request is authenticated by a user with , enable Insights
 	 */
 	if ( defined( 'GRAPHQL_DEBUG' ) && true === GRAPHQL_DEBUG || current_user_can( $graphql_insights_default_capability ) ) {
 		$graphql_insights_active = true;
