@@ -18,9 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( '\WPGraphQL\Extensions\Insights\Plugin' ) ) {
-	require __DIR__ . '/src/Plugin.php';
-}
+// Load Composer autoloader.
+require_once __DIR__ . '/vendor/autoload.php' );
 
 /**
  * Initialize the plugin.
@@ -82,7 +81,7 @@ function init() {
 
 
 	/**
-	 * Return the instance of the Insights plugin to kick off functionality
+	 * Return the instance of the Plugin to kick off functionality
 	 */
 	return Plugin::instance();
 }

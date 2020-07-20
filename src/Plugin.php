@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\Insights;
 final class Plugin {
 
 	/**
-	 * Holds the instance of the Insights class
+	 * Holds the instance of the Plugin class
 	 *
 	 * @var self|null
 	 */
@@ -24,7 +24,6 @@ final class Plugin {
 
 		self::$instance = new Plugin();
 		self::$instance->setup_constants();
-		self::$instance->includes();
 		self::$instance->actions();
 		self::$instance->filters();
 
@@ -90,17 +89,6 @@ final class Plugin {
 			define( 'GRAPHQL_TRACING_SPEC_VERSION', 1 );
 		}
 
-	}
-
-	/**
-	 * Include required files.
-	 * Uses composer's autoload
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function includes() {
-		require_once( WPGRAPHQL_INSIGHTS_PLUGIN_DIR . 'vendor/autoload.php' );
 	}
 
 	/**
