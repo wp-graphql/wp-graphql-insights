@@ -71,17 +71,17 @@ final class Plugin {
 
 		// Plugin Folder Path.
 		if ( ! defined( 'WPGRAPHQL_INSIGHTS_PLUGIN_DIR' ) ) {
-			define( 'WPGRAPHQL_INSIGHTS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+			define( 'WPGRAPHQL_INSIGHTS_PLUGIN_DIR', plugin_dir_path( __DIR__ ) );
 		}
 
 		// Plugin Folder URL.
 		if ( ! defined( 'WPGRAPHQL_INSIGHTS_PLUGIN_URL' ) ) {
-			define( 'WPGRAPHQL_INSIGHTS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+			define( 'WPGRAPHQL_INSIGHTS_PLUGIN_URL', plugin_dir_url( __DIR__ ) );
 		}
 
 		// Plugin Root File.
 		if ( ! defined( 'WPGRAPHQL_INSIGHTS_PLUGIN_FILE' ) ) {
-			define( 'WPGRAPHQL_INSIGHTS_PLUGIN_FILE', __FILE__ );
+			define( 'WPGRAPHQL_INSIGHTS_PLUGIN_FILE', __DIR__ . '/wp-graphql-insights.php' );
 		}
 
 		// The version of the Tracing spec that's being used.

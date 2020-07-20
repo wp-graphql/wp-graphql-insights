@@ -46,7 +46,6 @@ matrix:
 install:
   # Install coveralls.phar
   - wget -c -nc --retry-connrefused --tries=0 https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-  - chmod +x coveralls.phar
   - php coveralls.phar --version
 
 before_script:
@@ -56,7 +55,7 @@ before_script:
   - ls -al
 
 script:
-  - phpunit --coverage-clover build/logs/clover.xml
+  - php vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
   - travis_retry php coveralls.phar -v
