@@ -11,8 +11,7 @@
     }
   ],
   "require": {
-  },
-  "require-dev": {
+    "php": ">=5.5"
   },
   "config": {
     "optimize-autoloader": true
@@ -20,9 +19,6 @@
   "autoload": {
     "psr-4": {
       "WPGraphQL\\Extensions\\Insights\\": "src/"
-    },
-    "classmap": [
-      "src/"
-    ]
+    }
   }
 }
