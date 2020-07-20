@@ -2,7 +2,7 @@
 
 class _Tracing extends \WPGraphQL\Extensions\Insights\Tracing {
 	public static function _include_tracing_in_response( $results, $schema, $operation_name, $request, $variables ) {
-		return self::include_tracing_in_response( $results, $schema, $operation_name, $request, $variables );
+		return self::add_tracked_queries_to_response_extensions( $results, $schema, $operation_name, $request, $variables );
 	}
 	public static function _set_request_start_microtime( $time ) {
 		self::$request_start_microtime = $time;
