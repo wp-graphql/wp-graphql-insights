@@ -92,7 +92,7 @@ class TestTracing extends WP_UnitTestCase {
 
 	public function testAddTracingToResponseExtensions() {
 
-		\WPGraphQL\Extensions\Insights\Tracing::$include_in_response = true;
+		\WPGraphQL\Extensions\Insights\Tracing::$store_data = true;
 
 		$response = new \GraphQL\Executor\ExecutionResult();
 		$this->assertArrayNotHasKey( 'extensions', $response->toArray() );
@@ -104,7 +104,7 @@ class TestTracing extends WP_UnitTestCase {
 
 	public function testAddTracingToResponseExtensionsDisabled() {
 
-		\WPGraphQL\Extensions\Insights\Tracing::$include_in_response = false;
+		\WPGraphQL\Extensions\Insights\Tracing::$store_data = false;
 
 		$response = new \GraphQL\Executor\ExecutionResult();
 		$this->assertArrayNotHasKey( 'extensions', $response->toArray() );
