@@ -191,9 +191,10 @@ if ( ! class_exists( '\WPGraphQL\Extensions\Insights' ) ) {
 
 /**
  * Initialize the plugin
- * @return mixed|object|bool
+ *
+ * @return mixed
  */
-function graphql_insights_init() {
+function init() {
 
 	/**
 	 * Default $graphql_insights_active to false.
@@ -253,4 +254,4 @@ function graphql_insights_init() {
 	return Insights::instance();
 }
 
-add_action( 'init', '\WPGraphQL\Extensions\graphql_insights_init' );
+add_action( 'init', '\WPGraphQL\Extensions\init' );
