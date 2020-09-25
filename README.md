@@ -1,3 +1,12 @@
+# Deprecated
+
+The features of this plugin have been merged into WPGraphQL core. 
+
+See: https://github.com/wp-graphql/wp-graphql/releases/tag/v0.13.0
+
+----
+
+
 ![Logo](https://www.wpgraphql.com/wp-content/uploads/2017/06/wpgraphql-logo-e1502819081849.png)
 
 # WPGraphQL Insights
