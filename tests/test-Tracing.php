@@ -2,7 +2,7 @@
 
 class _Tracing extends \WPGraphQL\Extensions\Insights\Tracing {
 	public static function _include_tracing_in_response( $results, $schema, $operation_name, $request, $variables ) {
-		return self::include_tracing_in_response( $results, $schema, $operation_name, $request, $variables );
+		return self::add_tracked_queries_to_response_extensions( $results, $schema, $operation_name, $request, $variables );
 	}
 	public static function _set_request_start_microtime( $time ) {
 		self::$request_start_microtime = $time;
@@ -92,7 +92,7 @@ class TestTracing extends WP_UnitTestCase {
 
 	public function testAddTracingToResponseExtensions() {
 
-		\WPGraphQL\Extensions\Insights\Tracing::$include_in_response = true;
+		\WPGraphQL\Extensions\Insights\Tracing::$store_data = true;
 
 		$response = new \GraphQL\Executor\ExecutionResult();
 		$this->assertArrayNotHasKey( 'extensions', $response->toArray() );
@@ -104,7 +104,7 @@ class TestTracing extends WP_UnitTestCase {
 
 	public function testAddTracingToResponseExtensionsDisabled() {
 
-		\WPGraphQL\Extensions\Insights\Tracing::$include_in_response = false;
+		\WPGraphQL\Extensions\Insights\Tracing::$store_data = false;
 
 		$response = new \GraphQL\Executor\ExecutionResult();
 		$this->assertArrayNotHasKey( 'extensions', $response->toArray() );

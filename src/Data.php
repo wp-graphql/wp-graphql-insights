@@ -1,4 +1,5 @@
 <?php
+
 namespace WPGraphQL\Extensions\Insights;
 
 /**
